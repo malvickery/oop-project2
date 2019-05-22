@@ -1,0 +1,26 @@
+#logo {
+    vertical-align: center;
+    align-content: center;
+    clear: both;
+}
+
+img {     
+    float: left;
+    margin-left: 5%;
+    margin-top: -2%;
+}
+
+h1 {
+    font: normal 300% "Oswald", sans-serif;
+    text-align: center;
+    text-shadow: 1px 1px 2px #777;
+    margin-top: 30px; 
+    color: #333;
+}
+#myMap {
+    border: solid 2px #000;
+    height: 550px;
+    margin-top: 2%;
+}
+
+

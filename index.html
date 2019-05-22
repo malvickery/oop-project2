@@ -1,0 +1,112 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Carnival Cruise Line North American Departure Ports</title>
+    <link href="https://fonts.googleapis.com/css?family=Oswald" rel="stylesheet">
+    <script type="text/javascript" src="https://www.bing.com/api/maps/mapcontrol"></script>
+    <link rel="stylesheet" href="main.css">
+    <script>
+        function getMapKey() {
+            return "AtJZLKpuXtnAPKrRwmBVZBf-cAs8mBjGe8gL4Q2rFZV-74NjTocDgJUdBnCz0sp0";
+        };
+
+        var bingMap;
+
+        var ports = []; //array to store departure ports
+        
+        //departure ports to store within the ports array
+        ports[0] = "Cruise Maryland Terminal, 39.26496909999999,-76.59863229999996";
+        ports[1] = "Port of Charleston, 32.7837704,-79.92456290000001";
+        ports[2] = "Port of Galveston, 29.3082572,-94.7974812";
+        ports[3] = "Honolulu Pier 2, 21.3013233,-157.86498919999997";
+        ports[4] = "Jaxport Cruise Terminal, 30.407007,-81.57867899999997";
+        ports[5] = "Long Beach Cruise Terminal, 33.7513045,-118.1888151";
+        ports[6] = "PortMiami Cruise Terminal, 25.7788029,-80.17799350000001";
+        ports[7] = "Mobile Alabama Cruise Terminal, 30.6907908,-88.03885359999998";
+        ports[8] = "Port of New Orleans, 29.9400424,-90.06151490000002";
+        ports[9] = "Port of Norfolk, 36.8473501,-76.29597000000001";
+        ports[10] = "New York Manhattan Cruise Terminal, 40.7676775,-73.99672290000001";
+        ports[11] = "Port Canaveral, 28.4111625,-80.6284609";
+        ports[12] = "Port Everglades, 26.0816782,-80.12060819999999";
+        ports[13] = "Port of San Juan, 18.4626591,-66.11001679999998";
+        ports[14] = "Port of Seattle, 47.6332986,-122.37965280000003";
+        ports[15] = "Port Tampa Bay, 27.9454167,-82.44421590000002";
+        ports[16] = "Canada Place Ship Terminal, 49.288826, -123.111122";
+
+        function loadMap() { //function that loads the bing map and creates it in the myMap div.
+            bingMap = new Microsoft.Maps.Map(document.getElementById("myMap"), {
+                credentials: getMapKey(),
+                customizeOverlays: true,
+                enableClickableLogo: true,
+                enableSearchLogo: true,
+                showDashboard: true,
+                showBreadcrumb: true,
+                showCopyright: true,
+                zoom: 10,
+                labelOverlay: Microsoft.Maps.LabelOverlay.hidden
+            });
+            loadPins(); //enables the pins to load onload of the page 
+        }
+            function loadPins() { //fuction to allow the pins to load
+
+                var mapArray = []; 
+
+                bingMap.entities.clear();
+
+                for (var i = 0; i < ports.length; i++) {
+                    var port = ports[i].split(",");
+                    var latLong = new Microsoft.Maps.Location(parseFloat(port[1]), parseFloat(port[2]));
+                    var currentPin = createMapPin(latLong, port[0]);
+                    mapArray.push(latLong);
+                }
+
+                var bestview = Microsoft.Maps.LocationRect.fromLocations(mapArray);
+
+                bingMap.setView({
+                    bounds: bestview
+                });
+            }
+
+            function createMapPin(latLong, portName) { //function that creats the map pins
+
+                var pinImg = "images/carnivallogo2.jpg"; //variable that calls the load image for the pins
+
+                var pin = new Microsoft.Maps.Pushpin(latLong, {
+                    icon: pinImg,
+                    anchor: new Microsoft.Maps.Point(8, 8),
+                    draggable: true,
+                    width: 48,
+                    height: 48
+                });
+
+                pin.title = portName;
+
+                pin.newProp = "This is a new property";
+
+                Microsoft.Maps.Events.addHandler(pin, "click", changeLogo); //mixture of dynamic html and javascript that allows the pin image to change on lick
+
+                bingMap.entities.push(pin);
+
+                return pin;
+            }
+
+            function changeLogo(e) { //function that changes the pin image on click
+                alert(e.target.title);
+                e.target.setOptions({
+                    icon: "images/porthole.jpg" 
+                });
+            }
+
+    </script>
+</head>
+
+<body onload="loadMap()"> <!--loads the map on page load-->
+    <div id="logo">
+        <img src="images/carnival-cruise-logo.jpg"> 
+        <h1>North American Departure Ports</h1>
+    </div>
+    <div id="myMap"> <!--div to load the map into-->
+    </div>
+</body>
+</html>
